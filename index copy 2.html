@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BLOOMPOT - The AI-Powered Smart Plant Pot</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      /* VARIABLES */
+      :root {
+        --primary: #4caf50;
+        --secondary: #2e7d32;
+        --accent: #81c784;
+        --dark: #1e1e1e;
+        --light: #f5f5f5;
+        --text: #333333;
+        --text-light: #666666;
+      }
+
+      /* RESET & GLOBAL STYLES */
+      *, *::before, *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--light);
+        color: var(--text);
+        line-height: 1.6;
+        padding-top: 0;
+        transition: padding-top 0.3s;
+      }
+
+      /* CONTAINER */
+      .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+
+      /* HEADER */
+      header {
+        background-color: #fff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        padding: 1rem 0;
+        transition: padding 0.3s, background-color 0.3s;
+      }
+      nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+      }
+      .logo-img {
+        max-width: 150px;
+        height: auto;
+      }
+      /* Navigation Links */
+      .nav-links {
+        display: flex;
+        align-items: center;
+        list-style: none;
+        gap: 2rem;
+      }
+      .nav-links a {
+        text-decoration: none;
+        color: var(--text);
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+      .nav-links a:hover {
+        color: var(--primary);
+      }
+      /* CTA button in nav */
+      .cta-button {
+        background-color: var(--primary);
+        color: #fff;
+        padding: 0.6rem 1.2rem;
+        border-radius: 30px;
+        font-weight: 600;
+        transition: background-color 0.3s;
+        text-decoration: none;
+      }
+      .cta-button:hover {
+        background-color: var(--secondary);
+      }
+      /* Hamburger Menu for Mobile */
+      .menu-toggle {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--text);
+        display: none;
+      }
+
+      /* HERO SECTION */
+      .hero {
+        margin-top: 100px; /* account for fixed header */
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 80vh;
+        position: relative;
+        overflow: hidden;
+        padding: 2rem 0;
+      }
+      .hero-content {
+        width: 50%;
+        padding-right: 2rem;
+        z-index: 2;
+      }
+      .hero-content h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: var(--dark);
+      }
+      .hero-content p {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+        color: var(--text-light);
+      }
+      .bloompot-button a {
+        position: relative;
+        display: inline-block;
+        padding: 0.8rem 1.5rem;
+        border: 2px solid #212121;
+        text-transform: uppercase;
+        color: #212121;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1rem;
+        overflow: hidden;
+      }
+      .bloompot-button a::before,
+      .bloompot-button a::after {
+        content: "";
+        position: absolute;
+        background-color: #f5f5f5;
+        transition: transform 0.3s ease-in-out;
+      }
+      .bloompot-button a::before {
+        top: 6px;
+        left: -2px;
+        width: calc(100% + 4px);
+        height: calc(100% - 12px);
+        transform: scaleY(1);
+      }
+      .bloompot-button a:hover::before {
+        transform: scaleY(0);
+      }
+      .bloompot-button a::after {
+        left: 6px;
+        top: -2px;
+        width: calc(100% - 12px);
+        height: calc(100% + 4px);
+        transform: scaleX(1);
+        transition-delay: 0.5s;
+      }
+      .bloompot-button a:hover::after {
+        transform: scaleX(0);
+      }
+      .bloompot-button a span {
+        position: relative;
+        z-index: 3;
+      }
+      .bloompot-button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        margin: 1rem 0;
+      }
+
+      /* 3D Model Container */
+      #model-container {
+        width: 50%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 1;
+      }
+
+      /* Brutalist GPT Omni Button */
+      .hero-brutalist-button {
+        position: absolute;
+        bottom: 2%;
+        right: 2%;
+        z-index: 3;
+        transform: scale(1);
+      }
+      .brutalist-button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border: 3px solid #000;
+        border-radius: 12px;
+        padding: 0.5rem;
+        text-decoration: none;
+        color: #000;
+        font-weight: bold;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        width: 80px;
+        height: 80px;
+        box-shadow: 8px 8px 0px #000;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+      .brutalist-button.openai {
+        background-color: #356854;
+      }
+      .brutalist-button::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        bottom: -150%;
+        width: 300%;
+        height: 300%;
+        border-radius: 50%;
+        transform: translateX(-50%) scale(1);
+        transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        z-index: 1;
+      }
+      .brutalist-button.openai::before {
+        background-color: #316b58;
+      }
+      .openai-logo {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+        border-radius: 50%;
+        background-color: #0f1715;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: spin 5s linear infinite;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      }
+      .openai-icon {
+        width: 54px;
+        height: 54px;
+        fill: #fff;
+        transform: scale(0.6);
+      }
+      @keyframes spin {
+        0% {
+          transform: translate(-50%, -50%) rotate(0deg);
+        }
+        100% {
+          transform: translate(-50%, -50%) rotate(360deg);
+        }
+      }
+      .button-text {
+        position: absolute;
+        bottom: 8px;
+        left: 0;
+        right: 0;
+        z-index: 2;
+        text-align: center;
+        opacity: 1;
+        transition: transform 0.6s;
+      }
+      .button-text span:first-child {
+        font-size: 0.75rem;
+        font-weight: 500;
+        margin-bottom: 2px;
+      }
+      .button-text span:last-child {
+        font-size: 0.9rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: #fff;
+      }
+      .brutalist-button.openai .button-text span:last-child {
+        color: #d6cbbf;
+      }
+
+      /* FEATURES SECTION */
+      .features {
+        padding: 4rem 0;
+        background-color: #fff;
+      }
+      .section-title {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+      .section-title h2 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: var(--dark);
+      }
+      .section-title p {
+        color: var(--text-light);
+        max-width: 700px;
+        margin: 0 auto;
+      }
+      .features-grid {
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+      .feature-card {
+        background-color: var(--light);
+        border-radius: 10px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s;
+      }
+      .feature-card:hover {
+        transform: translateY(-10px);
+      }
+      .feature-icon {
+        font-size: 2rem;
+        color: var(--primary);
+        margin-bottom: 1rem;
+      }
+      .feature-card h3 {
+        margin-bottom: 0.75rem;
+        font-size: 1.25rem;
+      }
+
+      /* HOW IT WORKS */
+      .how-it-works {
+        padding: 4rem 0;
+        background-color: var(--light);
+      }
+      .steps {
+        display: flex;
+        justify-content: space-between;
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+      .step {
+        text-align: center;
+        flex: 1;
+      }
+      .step-number {
+        background-color: var(--primary);
+        color: #fff;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin: 0 auto 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        font-weight: bold;
+      }
+
+      /* PRICING */
+      .pricing {
+        padding: 4rem 0;
+        background-color: #fff;
+      }
+      .price-card {
+        background-color: var(--light);
+        border-radius: 10px;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        max-width: 400px;
+        margin: 0 auto;
+      }
+      .price-card h3 {
+        margin-bottom: 1rem;
+      }
+      .price {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--primary);
+        margin: 1rem 0;
+      }
+      .price-subtitle {
+        color: var(--text-light);
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+        display: block;
+      }
+      .features-list {
+        list-style: none;
+        margin: 1.5rem 0;
+        padding: 0;
+        text-align: left;
+      }
+      .features-list li {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      }
+      .features-list li:last-child {
+        border-bottom: none;
+      }
+
+      /* TESTIMONIALS */
+      .testimonials {
+        padding: 4rem 0;
+        background-color: var(--light);
+      }
+      .testimonial-grid {
+        display: grid;
+        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        margin-top: 2rem;
+      }
+      .testimonial-card {
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+      .testimonial-text {
+        font-style: italic;
+        margin-bottom: 1rem;
+        flex-grow: 1;
+      }
+      .testimonial-author {
+        display: flex;
+        align-items: center;
+        margin-top: auto;
+      }
+      .author-img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 1rem;
+        background-color: var(--accent);
+      }
+
+      /* FOOTER */
+      footer {
+        background-color: var(--dark);
+        color: #fff;
+        padding: 4rem 0 2rem;
+        position: relative;
+        overflow: hidden;
+      }
+      footer::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(
+          90deg,
+          var(--primary),
+          var(--accent),
+          var(--secondary)
+        );
+      }
+      .footer-content {
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        margin-bottom: 3rem;
+        position: relative;
+        z-index: 1;
+      }
+      .footer-column h3 {
+        font-size: 1.25rem;
+        margin-bottom: 1.5rem;
+        position: relative;
+        display: inline-block;
+      }
+      .footer-column h3::after {
+        content: "";
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 40px;
+        height: 3px;
+        background-color: var(--primary);
+      }
+      .footer-links {
+        list-style: none;
+      }
+      .footer-links li {
+        margin-bottom: 1rem;
+      }
+      .footer-links a {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        transition: color 0.3s, transform 0.3s;
+      }
+      .footer-links a:hover {
+        color: #fff;
+        transform: translateX(5px);
+      }
+      .social-links {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+      .social-links a {
+        color: #fff;
+        background-color: rgba(255, 255, 255, 0.1);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+      }
+      .social-links a:hover {
+        background-color: var(--primary);
+        transform: translateY(-5px);
+      }
+      .copyright {
+        text-align: center;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.5);
+        position: relative;
+        z-index: 1;
+      }
+      .footer-form input {
+        width: 100%;
+        padding: 0.75rem;
+        border: none;
+        background-color: rgba(255, 255, 255, 0.05);
+        border-radius: 5px;
+        color: #fff;
+        margin-bottom: 1rem;
+      }
+      .footer-form input::placeholder {
+        color: rgba(255, 255, 255, 0.3);
+      }
+      .footer-form .cta-button {
+        width: 100%;
+        display: block;
+      }
+
+      /* RESPONSIVE STYLES */
+      @media (max-width: 768px) {
+        /* Header Mobile Menu */
+        .menu-toggle {
+          display: block;
+        }
+        .nav-links {
+          flex-direction: column;
+          position: absolute;
+          top: 100%;
+          right: 1rem;
+          background-color: #fff;
+          border: 1px solid #ddd;
+          border-radius: 6px;
+          padding: 1rem;
+          gap: 1rem;
+          display: none;
+        }
+        .nav-links.open {
+          display: flex;
+        }
+        /* Hero Section: stack content */
+        .hero {
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          padding: 2rem 1rem;
+        }
+        .hero-content,
+        #model-container {
+          width: 100%;
+          padding: 0;
+        }
+        #model-container {
+          position: relative;
+          height: 300px;
+          opacity: 0.2;
+          margin-top: 1rem;
+        }
+        /* Adjust Brutalist Button on Mobile */
+        .hero-brutalist-button {
+          bottom: 1rem;
+          right: 1rem;
+          width: 60px;
+          height: 60px;
+        }
+        .brutalist-button {
+          width: 60px;
+          height: 60px;
+        }
+        /* Steps: stack vertically */
+        .steps {
+          flex-direction: column;
+          align-items: center;
+        }
+        .step {
+          width: 100%;
+          margin-bottom: 1.5rem;
+        }
+      }
+    </style>
+    <!-- Import map to resolve "three" -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.140.0/build/three.module.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header>
+      <div class="container">
+        <nav>
+          <div class="logo">
+            <img src="bloompot_logo.png" alt="Bloompot Logo" class="logo-img" />
+          </div>
+          <button class="menu-toggle" aria-label="Open Menu">
+            <i class="fas fa-bars"></i>
+          </button>
+          <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#testimonials">Reviews</a></li>
+            <li><a href="docs.html">Docs</a></li>
+            <li>
+              <a href="#contact" class="cta-button">Get BLOOMPOT</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1>Smart Plant Care Powered by AI</h1>
+          <p>
+            BLOOMPOT monitors soil conditions, automatically waters your plants,
+            and sends alerts to your phone. Grow healthier plants with less
+            effort.
+          </p>
+          <button class="bloompot-button">
+            <a href="#pricing"><span>Get BLOOMPOT</span></a>
+          </button>
+        </div>
+      </div>
+      <div id="model-container"></div>
+      <button class="brutalist-button openai hero-brutalist-button">
+        <div class="openai-logo">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            class="openai-icon"
+          >
+            <path
+              fill="#10A37F"
+              d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.8956zm16.0993 3.8558L12.5907 8.3829 14.6108 7.2144a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.3927-.6813zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"
+            ></path>
+          </svg>
+        </div>
+        <div class="button-text">
+          <span>Powered By</span>
+          <span>GPT-Omni</span>
+        </div>
+      </button>
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <section class="features" id="features">
+      <div class="container">
+        <div class="section-title">
+          <h2>Smart Features</h2>
+          <p>
+            Designed with advanced technology to make plant care effortless
+          </p>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-tint"></i>
+            </div>
+            <h3>Smart Watering</h3>
+            <p>
+              The pot automatically waters your plants based on moisture levels,
+              ensuring they're never over or under-watered.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-sun"></i>
+            </div>
+            <h3>Light Monitoring</h3>
+            <p>
+              Built-in sensors track light exposure and notify you when your plant
+              needs to be relocated for optimal growth.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-thermometer-half"></i>
+            </div>
+            <h3>Temperature Control</h3>
+            <p>
+              Monitors ambient temperature and alerts you when conditions are
+              outside your plant's ideal range.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-mobile-alt"></i>
+            </div>
+            <h3>Mobile App</h3>
+            <p>
+              Get real-time updates and insights about your plant's health and
+              needs directly on your smartphone.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-brain"></i>
+            </div>
+            <h3>AI Plant Recognition</h3>
+            <p>
+              The app can identify your plant species and automatically adjust
+              care settings for optimal growth.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-battery-full"></i>
+            </div>
+            <h3>Long Battery Life</h3>
+            <p>
+              Rechargeable battery lasts up to 6 months on a single charge with
+              normal use.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="how-it-works" id="how-it-works">
+      <div class="container">
+        <div class="section-title">
+          <h2>How It Works</h2>
+          <p>Simple setup, smart technology, and stress-free plant care</p>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <h3>Place Your Plant</h3>
+            <p>
+              Transfer your plant into the BLOOMPOT and fill the water reservoir.
+            </p>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <h3>Connect the App</h3>
+            <p>
+              Download our app and pair it with your BLOOMPOT via Bluetooth.
+            </p>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <h3>Let AI Do the Rest</h3>
+            <p>
+              The pot will monitor and care for your plant, sending updates and
+              alerts as needed.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="pricing" id="pricing">
+      <div class="container">
+        <div class="section-title">
+          <h2>Simple Pricing</h2>
+          <p>Smart plant care with no subscription needed</p>
+        </div>
+        <div class="price-card">
+          <h3>BLOOMPOT AI Smart Pot</h3>
+          <div class="price">$149.99</div>
+          <span class="price-subtitle">one-time purchase</span>
+          <p>
+            Everything you need to get started with smarter plant care.
+          </p>
+          <ul class="features-list">
+            <li>Smart pot with water reservoir</li>
+            <li>Free companion app</li>
+            <li>2-year warranty</li>
+            <li>60-day money-back guarantee</li>
+            <li>Free shipping</li>
+          </ul>
+          <a href="#contact" class="cta-button">Get BLOOMPOT</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testimonials" id="testimonials">
+      <div class="container">
+        <div class="section-title">
+          <h2>What Plant Lovers Say</h2>
+          <p>Join thousands of happy plant parents</p>
+        </div>
+        <div class="testimonial-grid">
+          <div class="testimonial-card">
+            <p class="testimonial-text">
+              "I was killing all my plants before getting BLOOMPOT. Now my
+              apartment looks like a jungle and I barely have to do anything!"
+            </p>
+            <div class="testimonial-author">
+              <div class="author-img"></div>
+              <div>
+                <h4>Sarah Johnson</h4>
+                <p>Plant Enthusiast</p>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <p class="testimonial-text">
+              "As someone who travels frequently, this pot has been a lifesaver.
+              My plants are thriving even when I'm away for weeks."
+            </p>
+            <div class="testimonial-author">
+              <div class="author-img"></div>
+              <div>
+                <h4>Michael Chen</h4>
+                <p>Business Traveler</p>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <p class="testimonial-text">
+              "The AI technology in BLOOMPOT is incredible. It knew exactly what
+              my fiddle leaf fig needed better than I ever could!"
+            </p>
+            <div class="testimonial-author">
+              <div class="author-img"></div>
+              <div>
+                <h4>Emily Rodriguez</h4>
+                <p>Home Gardener</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="contact">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-column">
+            <h3>BLOOMPOT</h3>
+            <p>
+              Making plant care smarter and simpler with AI technology that
+              understands what your plants need.
+            </p>
+            <div class="social-links">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+          </div>
+          <div class="footer-column">
+            <h3>Explore</h3>
+            <ul class="footer-links">
+              <li>
+                <a href="#features"
+                  ><i class="fas fa-chevron-right"></i> Features</a
+                >
+              </li>
+              <li>
+                <a href="#how-it-works"
+                  ><i class="fas fa-chevron-right"></i> How It Works</a
+                >
+              </li>
+              <li>
+                <a href="#pricing"
+                  ><i class="fas fa-chevron-right"></i> Pricing</a
+                >
+              </li>
+              <li>
+                <a href="#testimonials"
+                  ><i class="fas fa-chevron-right"></i> Reviews</a
+                >
+              </li>
+              <li>
+                <a href="#"
+                  ><i class="fas fa-chevron-right"></i> Support</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Contact Us</h3>
+            <div class="contact-info">
+              <i class="fas fa-envelope"></i>
+              <span>hello@bloompot.com</span>
+            </div>
+            <div class="contact-info">
+              <i class="fas fa-phone"></i>
+              <span>(555) 123-4567</span>
+            </div>
+            <div class="contact-info">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>123 Plant Street, San Francisco, CA 94107</span>
+            </div>
+            <button class="ai-button" style="margin-top: 1rem;">
+              <i class="fas fa-robot"></i>
+              Powered by AI
+            </button>
+          </div>
+          <div class="footer-column">
+            <h3>Stay Updated</h3>
+            <p>
+              Subscribe to our newsletter for plant care tips and exclusive
+              offers.
+            </p>
+            <form class="footer-form">
+              <input type="email" placeholder="Your email address" required />
+              <button type="submit" class="cta-button">Subscribe</button>
+            </form>
+          </div>
+        </div>
+        <div class="copyright">
+          <p>&copy; 2025 BLOOMPOT AI. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- JAVASCRIPT: Mobile Menu & Header Shrink -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const menuToggle = document.querySelector(".menu-toggle");
+        const navLinks = document.querySelector(".nav-links");
+        menuToggle.addEventListener("click", () => {
+          navLinks.classList.toggle("open");
+        });
+      });
+      window.addEventListener("scroll", () => {
+        const header = document.querySelector("header");
+        if (window.scrollY > 50) {
+          header.style.padding = "0.5rem 0";
+        } else {
+          header.style.padding = "1rem 0";
+        }
+      });
+    </script>
+
+    <!-- 3D MODEL SCRIPT -->
+    <script type="module">
+      import * as THREE from "three";
+      import { GLTFLoader } from "https://unpkg.com/three@0.140.0/examples/jsm/loaders/GLTFLoader.js";
+      import { OrbitControls } from "https://unpkg.com/three@0.140.0/examples/jsm/controls/OrbitControls.js";
+
+      function init3DScene(containerId, modelPath) {
+        const container = document.getElementById(containerId);
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xf5f5f5);
+        const camera = new THREE.PerspectiveCamera(
+          75,
+          container.clientWidth / container.clientHeight,
+          0.1,
+          1000
+        );
+        camera.position.set(0, 1.5, 5);
+        const renderer = new THREE.WebGLRenderer({
+          antialias: true,
+          alpha: true,
+        });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setClearColor(0x000000, 0);
+        container.appendChild(renderer.domElement);
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableZoom = false;
+        controls.enablePan = false;
+        controls.autoRotate = false;
+        controls.update();
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+        scene.add(ambientLight);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+        directionalLight.position.set(5, 10, 7.5);
+        scene.add(directionalLight);
+        const spotLight = new THREE.SpotLight(0x4caf50, 0.8);
+        spotLight.position.set(0, 10, 0);
+        spotLight.angle = Math.PI / 4;
+        spotLight.penumbra = 0.1;
+        spotLight.decay = 2;
+        spotLight.distance = 200;
+        scene.add(spotLight);
+        const modelGroup = new THREE.Group();
+        scene.add(modelGroup);
+        const loader = new GLTFLoader();
+        loader.load(
+          modelPath,
+          (gltf) => {
+            const model = gltf.scene;
+            model.traverse((child) => {
+              if (child.isMesh) {
+                const oldMat = child.material;
+                const newMat = Array.isArray(oldMat)
+                  ? oldMat.map((mat) => mat.clone())
+                  : oldMat.clone();
+                child.material = newMat;
+                const setColor = (material, colorHex) => {
+                  material.map = null;
+                  material.color.set(colorHex);
+                  material.needsUpdate = true;
+                };
+                const applyColor = (colorHex) => {
+                  if (Array.isArray(child.material)) {
+                    child.material.forEach((mat) => setColor(mat, colorHex));
+                  } else {
+                    setColor(child.material, colorHex);
+                  }
+                };
+                switch (child.name) {
+                  case "Furniture_Pad_(18mm)_(3)_(1)_(1)":
+                  case "Furniture_Pad_(18mm)_(2)_(1)_(1)":
+                  case "Furniture_Pad_(18mm)_(1)_(1)_(1)":
+                  case "Furniture_Pad_(18mm)_(4)":
+                    applyColor(0x000000);
+                    break;
+                  case "ANNAFFIATORE_V3_(3)_(1)":
+                  case "ANNAFFIATORE_V3_(2)_(1)":
+                  case "Cover_Soil_Sensor":
+                    applyColor(0x595959);
+                    break;
+                  case "Dirt_(2)":
+                    applyColor(0x292115);
+                    break;
+                  case "Internal_Pot_(2.32_cubic_of_soil)":
+                    applyColor(0x000000);
+                    break;
+                  case "Water_Reloader":
+                  case "Tube_(Pump_To_Irrigation)_(1)":
+                  case "Container_Water_(4)":
+                  case "Container_Water_(Cap)_(1)_(1)":
+                  case "Guarnizione_Tappo_Container_(1)_(1)":
+                  case "Water_(1)":
+                    applyColor(0x595959);
+                    break;
+                  case "Main_Bottom":
+                    applyColor(0x343434);
+                    break;
+                  case "Main_Top":
+                    applyColor(0xffffff);
+                    break;
+                  case "Internal_Pot_(2.32_cubic_of_soil)_(2)_(1)":
+                    applyColor(0x292115);
+                    break;
+                  case "tf_02":
+                    applyColor(0x495727);
+                    break;
+                  case "Cable_Organizer_Soil_Moisture_(1)":
+                    applyColor(0x1e1e1e);
+                    break;
+                }
+              }
+            });
+            model.scale.set(0.1, 0.1, 0.1);
+            model.rotation.x = (Math.PI * 3) / 2;
+            const box = new THREE.Box3().setFromObject(model);
+            const center = new THREE.Vector3();
+            box.getCenter(center);
+            model.position.sub(center);
+            modelGroup.add(model);
+          },
+          undefined,
+          (error) => {
+            console.error("Error loading model:", error);
+          }
+        );
+        function animate() {
+          requestAnimationFrame(animate);
+          if (modelGroup) {
+            modelGroup.rotation.y += 0.01;
+          }
+          controls.update();
+          renderer.render(scene, camera);
+        }
+        animate();
+        window.addEventListener("resize", () => {
+          camera.aspect = container.clientWidth / container.clientHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(container.clientWidth, container.clientHeight);
+        });
+      }
+      init3DScene("model-container", "model.gltf");
+    </script>
+  </body>
+</html>
